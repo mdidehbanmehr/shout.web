@@ -10,7 +10,7 @@ export const ShoutView = () => {
 
   return (
     <>
-      <HeaderBar header={"Shouts"} text={"Below you can see people shouting"} />
+      <HeaderBar header={"Shouts"} text={"Below you can see people shouting 😐"} />
       <div style={styles.commentContainer}>
         {shouts?.map((shout) => {
           return (

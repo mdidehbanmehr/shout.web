@@ -2,7 +2,6 @@ import { useQuery } from "react-query";
 import axios, { AxiosRequestConfig, AxiosResponse } from "axios";
 // import * as dotenv from "dotenv";
 
-
 interface Response {
   id: number;
   email: string;
@@ -10,6 +9,12 @@ interface Response {
   message: string;
   createdAt: Date;
   updatedAt: Date;
+}
+
+interface CreateShoutParams {
+  email: string;
+  author: string;
+  message: string;
 }
 
 // dotenv.config();
@@ -25,17 +30,30 @@ const get = async <REQ, RES = undefined>(
   return await API.get<REQ, AxiosResponse<RES>>(url, config);
 };
 
+const post = async <REQ, RES = undefined>(
+  url: string,
+  data?: CreateShoutParams | undefined
+): Promise<AxiosResponse<RES>> => {
+  console.log(data)
+  return await API.post<REQ, AxiosResponse<RES>>(url, data);
+};
+
 const getShouts = async () => {
   const url = "shout";
   const { data }: { data: Response[] } = await get(url, {});
-  console.log(data)
   return data;
 };
 
-
 export const useGetShouts = () => {
-    console.log(process.env.REACT_APP_API_PATH)
-    return useQuery(["getResturants",], () =>
-      getShouts()
-    );
-  };
+  return useQuery(["getShouts"], () => getShouts());
+};
+
+const postShout = async (params: CreateShoutParams) => {
+  const url = "shout";
+  const { data }: { data: Response[] } = await post(url,  params);
+  return data;
+};
+
+export const postPostShouts = (params: CreateShoutParams) => {
+  return postShout(params);
+};
