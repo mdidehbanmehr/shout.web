@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import { useGetShouts } from "../hooks/shout";
 import { StyleSheet } from "../models/StyleSheet";
 import { HeaderBar } from "./Header";
@@ -6,7 +6,9 @@ import { ShoutItem } from "./ShoutItem";
 import { SubmitShout } from "./SubmitShout";
 
 export const ShoutView = () => {
-  let { data: shouts, isLoading } = useGetShouts();
+  const [submit, setsubmitted] = useState(false);
+
+  let { data: shouts, isLoading } = useGetShouts(submit);
 
   return (
     <>
@@ -22,7 +24,7 @@ export const ShoutView = () => {
           );
         })}
       </div>
-      <SubmitShout></SubmitShout>
+      <SubmitShout change={submit} setChange={setsubmitted }></SubmitShout>
     </>
   );
 };

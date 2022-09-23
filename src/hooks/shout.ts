@@ -34,7 +34,6 @@ const post = async <REQ, RES = undefined>(
   url: string,
   data?: CreateShoutParams | undefined
 ): Promise<AxiosResponse<RES>> => {
-  console.log(data)
   return await API.post<REQ, AxiosResponse<RES>>(url, data);
 };
 
@@ -44,8 +43,8 @@ const getShouts = async () => {
   return data;
 };
 
-export const useGetShouts = () => {
-  return useQuery(["getShouts"], () => getShouts());
+export const useGetShouts = (change: Boolean) => {
+  return useQuery([change], () => getShouts());
 };
 
 const postShout = async (params: CreateShoutParams) => {
@@ -54,6 +53,6 @@ const postShout = async (params: CreateShoutParams) => {
   return data;
 };
 
-export const postPostShouts = (params: CreateShoutParams) => {
+export const submitShouts = (params: CreateShoutParams) => {
   return postShout(params);
 };

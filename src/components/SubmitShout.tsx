@@ -1,7 +1,7 @@
 import { StyleSheet } from "../models/StyleSheet";
 import { Button, Form, Input } from "antd";
 import React from "react";
-import { postPostShouts } from "../hooks/shout";
+import { submitShouts } from "../hooks/shout";
 
 const layout = {
   labelCol: { span: 7 },
@@ -15,11 +15,19 @@ const validateMessages = {
     email: "${label} is not a valid email!",
   },
 };
-/* eslint-enable no-template-curly-in-string */
-
-export const SubmitShout: React.FC = () => {
+export const SubmitShout: React.FC<{
+  change: Boolean;
+  setChange: React.Dispatch<React.SetStateAction<boolean>>;
+}> = ({
+  change,
+  setChange,
+}: {
+  change: Boolean;
+  setChange: React.Dispatch<React.SetStateAction<boolean>>;
+}) => {
   const onFinish = (values: any) => {
-    postPostShouts(values);
+    setChange(!change)
+    submitShouts(values);
   };
 
   return (
