@@ -26,8 +26,8 @@ export const SubmitShout: React.FC<{
   setChange: React.Dispatch<React.SetStateAction<boolean>>;
 }) => {
   const onFinish = (values: any) => {
-    setChange(!change)
     submitShouts(values);
+    setChange(!change)
   };
 
   return (

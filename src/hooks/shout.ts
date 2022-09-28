@@ -21,6 +21,8 @@ interface CreateShoutParams {
 const API = axios.create({
   baseURL: process.env.REACT_APP_API_PATH,
   timeout: 10000,
+  withCredentials: true,
+
 });
 
 const get = async <REQ, RES = undefined>(
@@ -49,10 +51,15 @@ export const useGetShouts = (change: Boolean) => {
 
 const postShout = async (params: CreateShoutParams) => {
   const url = "shout";
-  const { data }: { data: Response[] } = await post(url,  params);
+  const { data }: { data: Response[] } = await post(url, params);
   return data;
 };
 
 export const submitShouts = (params: CreateShoutParams) => {
   return postShout(params);
+};
+
+export const googleLogin = async () => {
+  const url = API.defaults.baseURL + "login";
+  window.open(url, "_blank")
 };
