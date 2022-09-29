@@ -46,6 +46,13 @@ const post = async <REQ, RES = undefined>(
   return await API.post<REQ, AxiosResponse<RES>>(url, data);
 };
 
+const  logout = async <REQ, RES = undefined>(
+  url: string,
+  config?: AxiosRequestConfig | undefined
+): Promise<AxiosResponse<RES>> => {
+  return await API.delete<REQ, AxiosResponse<RES>>(url, config);
+};
+
 const getShouts = async () => {
   const url = "shout";
   const { data }: { data: Shout[] } = await get(url, {});
@@ -72,11 +79,16 @@ export const googleLogin = async () => {
 };
 
 export const useGetUser = () => {
-  return useQuery([googleLogin], () => getUser());
+  return useQuery([logUserOut, logout, googleLogin], () => getUser());
 };
 
 const getUser = async () => {
   const url = "get-user";
   const { data }: { data: User } = await get(url, {});
   return data;
+};
+
+export const logUserOut = async () => {
+  const url = "logOut";
+  await logout (url, {});
 };

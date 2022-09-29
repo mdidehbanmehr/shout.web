@@ -1,7 +1,7 @@
 import { StyleSheet } from "../models/StyleSheet";
 import { Button, Form, Input } from "antd";
 import React from "react";
-import { submitShouts } from "../hooks/shout";
+import { logUserOut, submitShouts } from "../hooks/shout";
 
 interface User {
   name: string;
@@ -34,12 +34,19 @@ export const SubmitShout: React.FC<{
   setChange: React.Dispatch<React.SetStateAction<boolean>>;
   user: User | undefined;
 }) => {
-  const onFinish = (values: {message: string}) => {
+  const onFinish = (values: { message: string }) => {
     submitShouts({
-      ...values, author: user ? user.name : "", email: user ? user.email : "",
-      profilePicture: user ? user.avatar : ""
+      ...values,
+      author: user ? user.name : "",
+      email: user ? user.email : "",
+      profilePicture: user ? user.avatar : "",
     });
-    setChange(!change)
+    setChange(!change);
+  };
+
+  const logout = async () => {
+    await logUserOut();
+    window.location.reload();
   };
 
   return (
@@ -47,8 +54,7 @@ export const SubmitShout: React.FC<{
       {...layout}
       name="nest-messages"
       onFinish={onFinish}
-      validateMessages={validateMessages}
-      style={styles.container}>
+      validateMessages={validateMessages}>
       <Form.Item
         name={["message"]}
         label="Comment"
@@ -56,8 +62,11 @@ export const SubmitShout: React.FC<{
         <Input.TextArea />
       </Form.Item>
       <Form.Item wrapperCol={{ ...layout.wrapperCol, offset: 11 }}>
-        <Button type="primary" htmlType="submit">
+        <Button type="primary" htmlType="submit" style={styles.button}>
           Submit
+        </Button>
+        <Button type="primary" onClick={logout} style={styles.button}>
+          Log out
         </Button>
       </Form.Item>
     </Form>
@@ -65,5 +74,5 @@ export const SubmitShout: React.FC<{
 };
 
 const styles = StyleSheet.create({
-  container: {},
+  button: { margin: "3px" },
 });
