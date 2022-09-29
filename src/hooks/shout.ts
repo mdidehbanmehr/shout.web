@@ -2,8 +2,9 @@ import { useQuery } from "react-query";
 import axios, { AxiosRequestConfig, AxiosResponse } from "axios";
 // import * as dotenv from "dotenv";
 
-interface Response {
+interface Shout {
   id: number;
+  profilePicture: string,
   email: string;
   author: string;
   message: string;
@@ -11,8 +12,15 @@ interface Response {
   updatedAt: Date;
 }
 
+interface User {
+  name: string;
+  email: string;
+  avatar: string;
+}
+
 interface CreateShoutParams {
   email: string;
+  profilePicture: string,
   author: string;
   message: string;
 }
@@ -22,7 +30,6 @@ const API = axios.create({
   baseURL: process.env.REACT_APP_API_PATH,
   timeout: 10000,
   withCredentials: true,
-
 });
 
 const get = async <REQ, RES = undefined>(
@@ -41,7 +48,7 @@ const post = async <REQ, RES = undefined>(
 
 const getShouts = async () => {
   const url = "shout";
-  const { data }: { data: Response[] } = await get(url, {});
+  const { data }: { data: Shout[] } = await get(url, {});
   return data;
 };
 
@@ -51,7 +58,7 @@ export const useGetShouts = (change: Boolean) => {
 
 const postShout = async (params: CreateShoutParams) => {
   const url = "shout";
-  const { data }: { data: Response[] } = await post(url, params);
+  const { data }: { data: Shout[] } = await post(url, params);
   return data;
 };
 
@@ -61,5 +68,15 @@ export const submitShouts = (params: CreateShoutParams) => {
 
 export const googleLogin = async () => {
   const url = API.defaults.baseURL + "login";
-  window.open(url, "_blank")
+  window.open(url, "_blank");
+};
+
+export const useGetUser = () => {
+  return useQuery([googleLogin], () => getUser());
+};
+
+const getUser = async () => {
+  const url = "get-user";
+  const { data }: { data: User } = await get(url, {});
+  return data;
 };

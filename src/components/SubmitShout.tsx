@@ -3,6 +3,12 @@ import { Button, Form, Input } from "antd";
 import React from "react";
 import { submitShouts } from "../hooks/shout";
 
+interface User {
+  name: string;
+  email: string;
+  avatar: string;
+}
+
 const layout = {
   labelCol: { span: 7 },
   wrapperCol: { span: 10 },
@@ -18,15 +24,21 @@ const validateMessages = {
 export const SubmitShout: React.FC<{
   change: Boolean;
   setChange: React.Dispatch<React.SetStateAction<boolean>>;
+  user: User | undefined;
 }> = ({
   change,
   setChange,
+  user,
 }: {
   change: Boolean;
   setChange: React.Dispatch<React.SetStateAction<boolean>>;
+  user: User | undefined;
 }) => {
-  const onFinish = (values: any) => {
-    submitShouts(values);
+  const onFinish = (values: {message: string}) => {
+    submitShouts({
+      ...values, author: user ? user.name : "", email: user ? user.email : "",
+      profilePicture: user ? user.avatar : ""
+    });
     setChange(!change)
   };
 
@@ -37,15 +49,6 @@ export const SubmitShout: React.FC<{
       onFinish={onFinish}
       validateMessages={validateMessages}
       style={styles.container}>
-      <Form.Item name={["author"]} label="Name" rules={[{ required: true }]}>
-        <Input />
-      </Form.Item>
-      <Form.Item
-        name={["email"]}
-        label="Email"
-        rules={[{ type: "email", required: true }]}>
-        <Input />
-      </Form.Item>
       <Form.Item
         name={["message"]}
         label="Comment"
